@@ -7,6 +7,10 @@ on:
                 required: false
                 type: string
                 default: 'dist'
+        secrets:
+            some-secret:
+                description: 'A secret required for deployment'
+                required: true
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -15,6 +19,8 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ${{ inputs.artifact-name }}
+      - name: Output test secret
+        run: echo "The secret is ${{ secrets.some-secret }}"
       - name: List files
         run: ls -alR
       - name: Output information
