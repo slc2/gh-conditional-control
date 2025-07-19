@@ -7,12 +7,18 @@ on:
                 required: false
                 type: string
                 default: 'dist'
+        outputs:
+            result:
+                description: 'Result of the deployment'
+                value: ${{ jobs.deploy.outputs.result }}
         secrets:
             some-secret:
                 description: 'A secret required for deployment'
                 required: true
 jobs:
   deploy:
+    outputs:
+      result: ${{ steps.set-result.outputs.result }}
     runs-on: ubuntu-latest
     steps:
       - name: Get Code
@@ -25,3 +31,6 @@ jobs:
         run: ls -alR
       - name: Output information
         run: echo "This is a reusable workflow for deployment."
+      - name: set result output
+        id: set-result
+        run: echo "result=success" >> $GITHUB_OUTPUT
